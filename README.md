@@ -3,7 +3,7 @@ This is an example on how session windows work with kstream. It focuses on how t
 
 `KafkaProducerTest` sends a message to the topic `input` so that the aggregation can begin. The aggregation process itself is simple: it receives different String values which get concatenated. 
 
-Thanks to `.suppress(Suppressed.untilWindowCloses(unbounded()))` no partial aggregations are send to the `output` topic, but no final aggregation is sent either.
+Thanks to `.suppress(Suppressed.untilWindowCloses(unbounded()))` no partial aggregations are sent to the `output` topic, but no final aggregation is sent either.
 
 
 ## Requirements

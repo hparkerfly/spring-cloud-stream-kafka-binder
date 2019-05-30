@@ -1,0 +1,77 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: kafka-binder-test
+  boot:
+    admin:
+      client:
+        enabled: true
+        instance:
+          prefer-ip: true
+        url: http://spring-boot-admin-server:8080
+        api-path: "instances"
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: output
+          binder: kafka_kstreams_exactly_once
+        input:
+          destination: input
+          binder: kafka_kstreams_exactly_once
+      binders:
+        kafka_default:
+          type: kafka
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    default:
+                      producer:
+                        compressionType: gzip
+                        configuration:
+                          max.request.size: 31457280
+                    binder:
+                      autoAddPartitions: true
+                      minPartitionCount: 4
+                      replicationFactor: 1
+                      serdeError: logAndContinue
+                      brokers: localhost:9092
+        kafka_kstreams_exactly_once:
+          type: kstream
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    streams:
+                      binder:
+                        applicationId: kafka.aggregatedInfo
+                        autoAddPartitions: true
+                        minPartitionCount: 4
+                        replicationFactor: 1
+                        serdeError: logAndContinue
+                        brokers: localhost:9092
+                        configuration:
+                          cache.max.bytes.buffering: 104857600
+                          commit.interval.ms: 20000
+                          windowstore.changelog.additional.retention.ms: 86400000
+                          default:
+                            key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                            value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+aggregation:
+  sessionWindowSeconds: 30
+  stateStoreName: InfoStore
+
+logging:
+  level:
+    org.springframework.cloud: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*' # Enable all actuator endpoints

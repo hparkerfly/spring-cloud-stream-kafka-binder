@@ -1,11 +1,11 @@
 spring:
   application:
-    name: intradia-distributor
+    name: kafka-binder-example
   cloud:
     config:
      failFast: ${SPRING_CLOUD_CONFIG_FAILFAST:false}
      profile: ${SPRING_CLOUD_CONFIG_PROFILE:dev}
-     label: ${SPRING_CLOUD_CONFIG_LABEL:intradia-distributor}
+     label: ${SPRING_CLOUD_CONFIG_LABEL:kafka-binder-example}
      uri: ${SPRING_CLOUD_CONFIG_URI:http://config-service:8080/}
      retry:
         initialInterval: ${SPRING_CLOUD_CONFIG_INITIAL_INTERVAL:6000}

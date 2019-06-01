@@ -4,14 +4,6 @@ server:
 spring:
   application:
     name: kafka-binder-test
-  boot:
-    admin:
-      client:
-        enabled: true
-        instance:
-          prefer-ip: true
-        url: http://spring-boot-admin-server:8080
-        api-path: "instances"
   cloud:
     stream:
       bindings:

@@ -14,24 +14,6 @@ spring:
           destination: input
           binder: kafka_kstreams_exactly_once
       binders:
-        kafka_default:
-          type: kafka
-          environment:
-            spring:
-              cloud:
-                stream:
-                  kafka:
-                    default:
-                      producer:
-                        compressionType: gzip
-                        configuration:
-                          max.request.size: 31457280
-                    binder:
-                      autoAddPartitions: true
-                      minPartitionCount: 4
-                      replicationFactor: 1
-                      serdeError: logAndContinue
-                      brokers: localhost:9092
         kafka_kstreams_exactly_once:
           type: kstream
           environment:

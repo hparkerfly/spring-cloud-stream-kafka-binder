@@ -9,12 +9,12 @@ spring:
       bindings:
         output:
           destination: output
-          binder: kafka_kstreams_exactly_once
+          binder: kafka_kstreams
         input:
           destination: input
-          binder: kafka_kstreams_exactly_once
+          binder: kafka_kstreams
       binders:
-        kafka_kstreams_exactly_once:
+        kafka_kstreams:
           type: kstream
           environment:
             spring:
@@ -25,19 +25,18 @@ spring:
                       binder:
                         applicationId: kafka.aggregatedInfo
                         autoAddPartitions: true
-                        minPartitionCount: 4
+                        minPartitionCount: 2
                         replicationFactor: 1
                         serdeError: logAndContinue
                         brokers: localhost:9092
                         configuration:
                           cache.max.bytes.buffering: 104857600
                           commit.interval.ms: 20000
-                          windowstore.changelog.additional.retention.ms: 86400000
+                          windowstore.changelog.additional.retention.ms: 0
                           default:
                             key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                             value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
 aggregation:
-  sessionWindowSeconds: 30
   stateStoreName: InfoStore
 
 logging:

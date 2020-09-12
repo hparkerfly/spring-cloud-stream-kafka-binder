@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 @RunWith(SpringRunner.class)
 public class KafkaProducerTest {
 
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplate;
+  @Autowired private KafkaTemplate<String, String> kafkaTemplate;
 
   @Test
   public void sendMessage() {

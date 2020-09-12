@@ -10,5 +10,5 @@ public interface Bindings {
   KStream<String, String> sendPage();
 
   @Output("output")
-  KStream<String, String> aggregatedPages();
+  KStream<String, String> aggregatedInfo();
 }

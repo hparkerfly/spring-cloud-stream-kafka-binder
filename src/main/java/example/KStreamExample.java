@@ -1,12 +1,12 @@
 package example;
 
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.SessionWindows;
+import org.apache.kafka.streams.kstream.Named;
 import org.apache.kafka.streams.kstream.Suppressed;
-import org.apache.kafka.streams.state.SessionStore;
+import org.apache.kafka.streams.kstream.TimeWindows;
+import org.apache.kafka.streams.state.WindowStore;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -23,18 +23,19 @@ public class KStreamExample {
   @SendTo("output")
   public KStream<String, String> aggregateInfo(KStream<String, String> input) {
 
-    Duration window = Duration.ofSeconds(5L);
+    var window = Duration.ofSeconds(10L);
+    var grace = Duration.ofSeconds(5L);
+    var retention = Duration.ofSeconds(15L);
 
     return input
       .groupBy((k, v) -> "explicitKey")
-      .windowedBy(SessionWindows.with(window).grace(window))
+      .windowedBy(TimeWindows.of(window).grace(grace))
       .aggregate(
         () -> "",
-        (aggKey, newValue, valueAggregate) -> String.join(" ", valueAggregate, newValue),
-        (aggKey, leftList, rightList) -> String.join("", leftList, rightList),
-        Materialized.<String, String, SessionStore<Bytes, byte[]>>as("InfoStore")
-          .withKeySerde(Serdes.String())
-          .withValueSerde(Serdes.String()))
+        (aggKey, actual, accumulated) -> String.join(" ", accumulated, actual),
+        Named.as("aggregation"),
+        Materialized.<String, String, WindowStore<Bytes, byte[]>>as("InfoStore")
+          .withRetention(retention))
       .suppress(Suppressed.untilWindowCloses(unbounded()))
       .toStream()
       .map((key, value) -> pair(key.key() + "--" + key.window().toString(), value));

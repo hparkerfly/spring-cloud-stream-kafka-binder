@@ -1,6 +1,6 @@
-# Spring Cloud Stream - Kafka Binder
+# Spring Cloud Stream - Kafka Streams Binder
 ## Description
-This is an example of how `TimeWindows` work with `KStreams` binder. It focuses on how to use `KTable::suppress` so that no intermediate results are sent to the output topic until certain condition is met.
+This is an example of how `TimeWindows` work with `Kafka Streams` binder. It focuses on how to use `KTable::suppress` so that no intermediate results are sent to the output topic until certain condition is met.
 
 Besides, this project highlights how to configure both `retention.ms` and `segment.ms` times for `KStreams`.
 

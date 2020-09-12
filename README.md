@@ -20,4 +20,4 @@ Once the specified `retention.ms` and `segment.ms` times have been elapsed<sup>1
 <sup>1</sup> http://dalelane.co.uk/blog/?p=3993
 
 ## Requirements
-Kafka broker running on port 9092
+Kafka broker running on localhost:9092

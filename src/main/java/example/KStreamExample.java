@@ -4,7 +4,6 @@ import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
-import org.apache.kafka.streams.kstream.Suppressed;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.state.WindowStore;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -15,6 +14,7 @@ import java.time.Duration;
 
 import static org.apache.kafka.streams.KeyValue.pair;
 import static org.apache.kafka.streams.kstream.Suppressed.BufferConfig.unbounded;
+import static org.apache.kafka.streams.kstream.Suppressed.untilWindowCloses;
 
 @EnableBinding(Bindings.class)
 public class KStreamExample {
@@ -36,7 +36,7 @@ public class KStreamExample {
         Named.as("aggregation"),
         Materialized.<String, String, WindowStore<Bytes, byte[]>>as("InfoStore")
           .withRetention(retention))
-      .suppress(Suppressed.untilWindowCloses(unbounded()).withName("InfoStoreSuppressed"))
+      .suppress(untilWindowCloses(unbounded()).withName("InfoStoreSuppressed"))
       .toStream()
       .map((k, v) -> pair(k.key() + "-" + k.window().toString(), v));
   }

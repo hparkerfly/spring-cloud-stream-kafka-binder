@@ -8,10 +8,10 @@ spring:
     stream:
       bindings:
         output:
-          destination: output
+          destination: kstream-output
           binder: kafka_kstreams
         input:
-          destination: input
+          destination: kstream-input
           binder: kafka_kstreams
       binders:
         kafka_kstreams:
@@ -23,13 +23,17 @@ spring:
                   kafka:
                     streams:
                       binder:
-                        applicationId: kafka.aggregatedInfo
+                        applicationId: kstream.aggregatedInfo
                         autoAddPartitions: true
                         minPartitionCount: 2
                         replicationFactor: 1
                         serdeError: logAndContinue
                         brokers: localhost:9092
                         configuration:
+                          topic:
+                            retention.ms: 60000
+                            segment.ms: 10000
+                            cleanup.policy: compact,delete
                           cache.max.bytes.buffering: 104857600
                           commit.interval.ms: 20000
                           windowstore.changelog.additional.retention.ms: 0

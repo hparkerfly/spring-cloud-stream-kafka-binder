@@ -24,8 +24,8 @@ public class KStreamExample {
   public KStream<String, String> aggregateInfo(KStream<String, String> input) {
 
     var window = Duration.ofSeconds(10L);
-    var grace = Duration.ofSeconds(5L);
-    var retention = Duration.ofSeconds(15L);
+    var grace = Duration.ofSeconds(1L);
+    var retention = Duration.ofSeconds(60L);
 
     return input
       .groupBy((k, v) -> "explicitKey")
@@ -36,8 +36,8 @@ public class KStreamExample {
         Named.as("aggregation"),
         Materialized.<String, String, WindowStore<Bytes, byte[]>>as("InfoStore")
           .withRetention(retention))
-      .suppress(Suppressed.untilWindowCloses(unbounded()))
+      .suppress(Suppressed.untilWindowCloses(unbounded()).withName("InfoStoreSuppressed"))
       .toStream()
-      .map((key, value) -> pair(key.key() + "--" + key.window().toString(), value));
+      .map((k, v) -> pair(k.key() + "-" + k.window().toString(), v));
   }
 }

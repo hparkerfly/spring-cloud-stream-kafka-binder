@@ -21,6 +21,6 @@ public class KafkaProducerTest {
 
   @Test
   public void sendMessage() {
-    Stream.of("this", "is", "a", "test").forEachOrdered(value -> kafkaTemplate.send("input", value));
+    Stream.of("this", "is", "a", "test").forEachOrdered(value -> kafkaTemplate.send("kstream-input", value));
   }
 }

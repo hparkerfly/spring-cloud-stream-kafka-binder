@@ -7,7 +7,7 @@ import org.springframework.cloud.stream.annotation.Output;
 public interface Bindings {
 
   @Input("input")
-  KStream<String, String> sendPage();
+  KStream<String, String> sendInfo();
 
   @Output("output")
   KStream<String, String> aggregatedInfo();

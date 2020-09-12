@@ -36,8 +36,6 @@ spring:
                           default:
                             key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                             value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-aggregation:
-  stateStoreName: InfoStore
 
 logging:
   level:

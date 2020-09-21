@@ -13,6 +13,11 @@ This project uses:
 ## How it works
 `KafkaProducerTest` sends a message to the `input` topic so that the aggregation begins. The aggregation algorithm itself is quite simple: it receives different String values which are concatenated. They are all grouped by the same key.
 
+```
+Input: {"this", "is", "a", "test"}.
+Output: "this is a test".
+```
+
 Thanks to `.suppress(Suppressed.untilWindowCloses(unbounded()))` no partial aggregations are sent to the `output` topic, but no final result is either.
 
 Once the specified `retention.ms` and `segment.ms` times have been elapsed<sup>1</sup>, the messages belonging to the KStreams topics (KTable, changelog, repartition) are deleted.
